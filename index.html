@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>到處插火把</title>
+    <meta name="description" content="ECS - A-Frame School">
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+    <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/intersection-spawn.js"></script>
+    <script src="https://rawgit.com/ngokevin/kframe/csstricks/scenes/aincraft/components/snap.js"></script>
+    <script src="https://rawgit.com/mayognaise/aframe-mouse-cursor-component/master/dist/aframe-mouse-cursor-component.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets>
+        <img id="groundTexture" src="https://cdn.aframe.io/a-painter/images/floor.jpg">
+        <img id="skyTexture" src="https://cdn.aframe.io/a-painter/images/sky.jpg">
+        <img id="torchTexture" src="http://i.imgur.com/fMsT1Uz.png">
+        <!--  建立一個id="torch"的mixin，並指定各自屬性
+              offset:設定物體離中心點的位移，snap:目前尚不知用途，但0 0 0會有錯誤-->
+        <a-mixin id="torch" 
+               geometry="primitive: box;width:0.3; height:2; depth:0.3" 
+               material="src: #torchTexture; shader: flat" 
+               light="type: point; intensity: 1; color: #D2700E"
+               snap="offset:0 1 0;snap:0.1 0.1 0.1"  >
+        </a-mixin> 
+      </a-assets>
+      
+<!--       生成多個mixin="torch"的物件，並指定position -->
+      <a-entity mixin="torch" position="0 0 1"></a-entity>
+      <a-entity mixin="torch" position="3 0 10"></a-entity>
+      <a-entity mixin="torch" position="4 0 -6"></a-entity>
+      <a-entity mixin="torch" position="10 0 2"></a-entity>
+      <a-entity mixin="torch" position="6 0 -3"></a-entity>
+      <a-entity mixin="torch" position="-5 0 4"></a-entity>
+      <a-entity mixin="torch" position="-2 0 -2"></a-entity>
+      <a-entity mixin="torch" position="-8 0 1"></a-entity>
+      <a-entity mixin="torch" position="-3 0 0"></a-entity>
+      
+      
+      <a-entity id="sky" 
+                geometry="primitive: sphere; thetaLength: 90; radius: 300" 
+                material="side: back; height: 2048; width: 2048; src: #skyTexture; shader: flat">
+      </a-entity>
+    
+<!--       material中有個屬性為shader，預設值為"standard"
+      如果為特定設定或設定為standard則可多增加屬性:metalness及roughness -->
+      <a-entity id="ground" 
+                geometry="primitive: plane; height: 600; width: 600"
+                material="src: #groundTexture; roughness: 1" rotation="-90 0 0">
+      </a-entity>
+
+      <a-entity id="text" 
+                text="value: Light up the world!; color: yellow" 
+                position="2.5 2 -8" scale="8 8 8">
+      </a-entity>
+      <a-entity id="text2" 
+                text="value: Just click on the ground :D; color: #BBB" 
+                position="2 1 -8" scale="8 8 8">
+      </a-entity>
+      
+<!--       camera外加一個entity並設定position可以指定camera的位置(也就是使用者眼睛的位置)
+      look-controls代表可以控制視角  wasd-controls代表可以透過鍵盤的wasd控制移動，scceleration:設定移動速度 -->
+<!--       aframe-mouse-cursor-component.min.js插件
+      intersection-spawn裡的event:觸發條件;mixin:生成物件 -->
+      <a-entity position="0 2 0">
+      <a-entity camera look-controls  wasd-controls="acceleration: 200" >
+        <a-entity cursor 
+                  geometry="primitive: ring; radiusOuter: 0.015; radiusInner: 0.01; segmentsTheta: 32"
+                  material="color: #283644; shader: flat"
+                  raycaster="far: 30"
+                  position="0 0 -0.75"
+                  intersection-spawn="event: click; mixin: torch"></a-entity>
+      </a-entity>
+      </a-entity>
+
+    </a-scene>
+  </body>
+</html>
